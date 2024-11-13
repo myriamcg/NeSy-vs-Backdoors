@@ -3,8 +3,8 @@
 Logic Tensor Network (LTN) is a neurosymbolic framework that supports querying, learning and reasoning with both rich data and rich abstract knowledge about the world.
 LTN uses a differentiable first-order logic language, called Real Logic, to incorporate data and logic. The figure below describes features of Real Logic.
 
-The [example page](https://github.com/logictensornetworks/logictensornetworks/tree/master/examples) gives a non-exhaustive list of projects that use LTN. 
-Also, check out the [PyTorch implementation](https://github.com/tommasocarraro/LTNtorch).
+This repository contains the original implementation of LTN in TensorFlow 2. The [example page](https://github.com/logictensornetworks/logictensornetworks/tree/master/examples) gives a non-exhaustive list of projects that use LTN. 
+Also, check out the [PyTorch implementation](https://github.com/tommasocarraro/LTNtorch) by Tommaso Carraro.
 
 ## Description
 
