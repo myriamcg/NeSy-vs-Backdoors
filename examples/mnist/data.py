@@ -57,13 +57,36 @@ def get_mnist_op_dataset(
             Cannot fetch %i examples for each %i operands for testing." %(count_test,n_operands))
     
     img_train,label_train,img_test,label_test = get_mnist_data_as_numpy()
-    
-    img_per_operand_train = [img_train[i*count_train:i*count_train+count_train] for i in range(n_operands)]
-    label_per_operand_train = [label_train[i*count_train:i*count_train+count_train] for i in range(n_operands)]
-    label_result_train = np.apply_along_axis(op,0,label_per_operand_train)
-    img_per_operand_test = [img_test[i*count_test:i*count_test+count_test] for i in range(n_operands)]
-    label_per_operand_test = [label_test[i*count_test:i*count_test+count_test] for i in range(n_operands)]
-    label_result_test = np.apply_along_axis(op,0,label_per_operand_test)
+
+    # img_per_operand_train = [img_train[i*count_train:i*count_train+count_train] for i in range(n_operands)]
+    # label_per_operand_train = [label_train[i*count_train:i*count_train+count_train] for i in range(n_operands)]
+    # label_result_train = np.apply_along_axis(op,0,label_per_operand_train)
+    # img_per_operand_test = [img_test[i*count_test:i*count_test+count_test] for i in range(n_operands)]
+    # label_per_operand_test = [label_test[i*count_test:i*count_test+count_test] for i in range(n_operands)]
+    # label_result_test = np.apply_along_axis(op,0,label_per_operand_test)
+    # img_per_operand_train = [img_train[i * count_train: i * count_train] for i in range(n_operands)]
+    # label_per_operand_train = [label_train[i * count_train: i * count_train].astype(np.int32) for i in
+    #                            range(n_operands)]
+    # label_result_train = np.apply_along_axis(op, 0, label_per_operand_train)
+    #
+    # # --- Test operands and labels
+    # img_per_operand_test = [img_test[i * count_test: i * count_test] for i in range(n_operands)]
+    # label_per_operand_test = [label_test[i * count_test: i * count_test].astype(np.int32) for i in
+    #                           range(n_operands)]
+    # label_result_test = np.apply_along_axis(op, 0, label_per_operand_test)
+
+    img_train, label_train, img_test, label_test = get_mnist_data_as_numpy()
+
+    # --- Train operands and labels
+    img_per_operand_train = [img_train[i * count_train: (i + 1) * count_train] for i in range(n_operands)]
+    label_per_operand_train = [label_train[i * count_train: (i + 1) * count_train].astype(np.int32) for i in range(n_operands)]
+    label_result_train = np.apply_along_axis(op, 0, label_per_operand_train)
+
+    # --- Test operands and labels
+    img_per_operand_test = [img_test[i * count_test: (i + 1) * count_test] for i in range(n_operands)]
+    label_per_operand_test = [label_test[i * count_test: (i + 1) * count_test].astype(np.int32) for i in range(n_operands)]
+    label_result_test = np.apply_along_axis(op, 0, label_per_operand_test)
+
     
     ds_train = tf.data.Dataset.from_tensor_slices(tuple(img_per_operand_train)+(label_result_train,))\
             .take(count_train).shuffle(buffer_size).batch(batch_size)
