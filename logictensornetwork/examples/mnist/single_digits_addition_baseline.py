@@ -1,7 +1,7 @@
 import argparse
 import tensorflow as tf
-from tensorflow.keras import layers
-import baselines, data, commons
+from LTN.logictensornetwork.examples.mnist import baselines, commons, data
+
 
 def parse_args():
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)

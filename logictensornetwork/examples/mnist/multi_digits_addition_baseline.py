@@ -1,7 +1,5 @@
-import argparse
 import tensorflow as tf
-from tensorflow.keras import layers
-import baselines, data, commons
+from LTN.logictensornetwork.examples.mnist import baselines, commons, data
 import argparse
 
 def parse_args():
@@ -34,7 +32,7 @@ ds_train, ds_test = data.get_mnist_op_dataset(
 
 """ MODEL AND LOSS """
 
-multi_digits_addition = baselines.MultiDigits(199,hidden_dense_sizes=(128,))
+multi_digits_addition = baselines.MultiDigits(199, hidden_dense_sizes=(128,))
 loss_fn = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
 
 """ TRAINING """

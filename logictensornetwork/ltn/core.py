@@ -171,7 +171,7 @@ class _Model:
         if not self.model.trainable_variables:
             warnings.warn("The 'trainable_variables' attribute returned an empty list. Make sure that "\
                     "the weights of the layers in the %s instance have been initialized, "\
-                    "for example by calling the model a first time." % tf.keras.Model)
+                    "for examples by calling the model a first time." % tf.keras.Model)
         return self.model.trainable_variables
 
 class Predicate(_Model):

@@ -27,7 +27,7 @@ csv_path = args['csv_path']
 # - Multi-class: Male, Female, Blue, Orange.
 # - Multi-label: Only Male-Female and Blue-Orange are mutually exclusive.
 # 
-df = pd.read_csv("crabs.dat",sep=" ", skipinitialspace=True)
+df = pd.read_csv("crabs.dat", sep=" ", skipinitialspace=True)
 df = df.sample(frac=1) #shuffle
 
 features = df[['FL','RW','CL','CW','BD']]
