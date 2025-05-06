@@ -1,8 +1,6 @@
-import argparse
 import tensorflow as tf
-from tensorflow.keras import layers
 import ltn
-import baselines, data, commons
+from LTN.logictensornetwork.examples.mnist import baselines, commons, data
 import argparse
 
 def parse_args():
