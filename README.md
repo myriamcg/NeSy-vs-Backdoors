@@ -7,6 +7,33 @@ The project focuses on the robustness of a Logic Tensor Network (LTN) against Ba
 
 ## Building the LTN model
 
+## Setup
+
+In order to make the LTN examples run, first you need to create a virtual environment in the [logictensornetwork](logictensornetwork) folder. You can do this by running the following command:
+
+```bash
+python -m venv .venv
+```
+
+Then, you need to activate the virtual environment. You can do this by running the following command:
+
+```bash
+source ltn_env/bin/activate
+```
+
+Then, you need to install the requirements. You can do this by running the following command:
+
+```bash
+pip install -r requirements.txt
+```
+
+Then, in the base folder, you will use the interpreter from the virtual environment from the logictensornetwork folder. You can do this by manually setting the interpreter to be the one from the environment of the logictensornetworks ( can be found at `logictensornetwork/.venv/Scripts/python.exe`). 
+The python version is Python 3.12, pip version is 23.2.1. By doing this setup, you can ensure that you won't encounter deprecated packages errors. 
+
+
+
+## Experiments
+
 For the first milestone, the https://github.com/logictensornetworks/logictensornetworks repository was used as a reference. This repository contains a tutorial on how to use the LTN framework and a few examples on representative tasks for LTN https://github.com/logictensornetworks/logictensornetworks/tree/master/examples. From these examples, I chose using the **mnist** and the **smokes_friends_cancer** problems. 
 
 Although the used repository has the latest ltn version, the examples weren't updated to run on it, so in this repository I first had to modify the ipynb files from those directories to make them runnable. The experiments that were run can be found in the [examples directory](logictensornetwork/examples/). After making the code runnable, I focused more on the **mnist** problem, by first changing the operation that the model was being trained on (from addition to subtraction), experiment which can be found in [[single_digits_difference.ipynb](logictensornetwork%2Fexamples%2Fmnist%2Fsingle_digits_difference.ipynb)] .and then I tried adding more symbolic knowledge to the model, experiment which can be found in [[single_digits_addition_more_symbolic_knowledge.ipynb](logictensornetwork%2Fexamples%2Fmnist%2Fsingle_digits_addition_more_symbolic_knowledge.ipynb)].
