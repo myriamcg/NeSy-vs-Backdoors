@@ -3,6 +3,7 @@ from collections import defaultdict
 
 def train(
         epochs,
+        optimizer,
         metrics_dict,
         ds_train,
         ds_test,
@@ -30,9 +31,9 @@ def train(
             metrics.reset_state()
 
         for batch_elements in ds_train:
-            train_step(*batch_elements,  **scheduled_parameters[epoch])
+            train_step(*batch_elements, optimizer, metrics_dict,  **scheduled_parameters[epoch])
         for batch_elements in ds_test:
-            test_step(*batch_elements, **scheduled_parameters[epoch])
+            test_step(*batch_elements,metrics_dict, **scheduled_parameters[epoch])
 
         metrics_results = [metrics.result() for metrics in metrics_dict.values()]
 
