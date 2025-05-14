@@ -1,0 +1,3 @@
+[submodule "Badnet/BackdoorBox"]
+	path = Badnet/BackdoorBox
+	url = https://github.com/THUYimingLi/BackdoorBox.git
