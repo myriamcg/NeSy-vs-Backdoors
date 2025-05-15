@@ -4,19 +4,26 @@ __pycache__/
 *$py.class
 
 # data
-#data/
-#adv_dataset_old/
-
-# experiments
-#experiments/
+data/
+adv_dataset_old/
 
 # personal test code
-#*data*/
-#*experiments*/
-#tests/model/
-#mytest/
-#./test.sh
-#./test.py
-#./test2.py
-#./result
-#./experiments
+tests/model/
+mytest/
+test.sh
+test.py
+test2.py
+result/
+
+# Allow tracking experiment results
+# Remove any rules that ignore the whole experiments/ folder
+# If you still want to ignore certain temp/log files, use more specific rules
+
+# Example: ignore only log files, not the whole directory
+# experiments/*.log
+
+# Explicitly allow tracking everything in experiments/
+!experiments/
+!experiments/**
+
+# If needed, add a placeholder file to keep the directory structure
