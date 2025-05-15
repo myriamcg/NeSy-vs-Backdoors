@@ -84,7 +84,7 @@ if __name__ == '__main__':
         'gamma': 0.1,
         'schedule': [150, 180],
 
-        'epochs': 5,
+        'epochs': 2,
 
         'log_iteration_interval': 100,
         'test_epoch_interval': 10,

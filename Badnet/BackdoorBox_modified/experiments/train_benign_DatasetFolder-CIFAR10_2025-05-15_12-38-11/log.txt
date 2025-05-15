@@ -1,0 +1,17 @@
+==========Schedule parameters==========
+{'device': 'GPU', 'CUDA_VISIBLE_DEVICES': '0', 'GPU_num': 1, 'benign_training': True, 'batch_size': 128, 'num_workers': 16, 'lr': 0.1, 'momentum': 0.9, 'weight_decay': 0.0005, 'gamma': 0.1, 'schedule': [150, 180], 'epochs': 2, 'log_iteration_interval': 100, 'test_epoch_interval': 10, 'save_epoch_interval': 10, 'save_dir': 'experiments', 'experiment_name': 'train_benign_DatasetFolder-CIFAR10'}
+==========Use GPUs to train==========
+CUDA_VISIBLE_DEVICES=0
+CUDA_SELECTED_DEVICES=0
+Total train samples: 50000
+Total test samples: 10000
+Batch size: 128
+iteration every epoch: 390
+Initial learning rate: 0.1
+[2025-05-15_12:41:43] Epoch:1/2, iteration:100/390, lr: 0.10000000149011612, loss: 2.309983015060425, time: 206.75723838806152
+[2025-05-15_12:41:53] Epoch:1/2, iteration:200/390, lr: 0.10000000149011612, loss: 2.3067479133605957, time: 9.301000356674194
+[2025-05-15_12:42:02] Epoch:1/2, iteration:300/390, lr: 0.10000000149011612, loss: 2.302617311477661, time: 9.299077033996582
+[2025-05-15_12:45:37] Epoch:2/2, iteration:9/390, lr: 0.10000000149011612, loss: 2.3140480518341064, time: 215.49380326271057
+[2025-05-15_12:45:47] Epoch:2/2, iteration:109/390, lr: 0.10000000149011612, loss: 2.307537794113159, time: 9.190998554229736
+[2025-05-15_12:45:56] Epoch:2/2, iteration:209/390, lr: 0.10000000149011612, loss: 2.313481092453003, time: 9.189000368118286
+[2025-05-15_12:46:05] Epoch:2/2, iteration:309/390, lr: 0.10000000149011612, loss: 2.3014111518859863, time: 9.266002655029297

@@ -4,19 +4,19 @@ __pycache__/
 *$py.class
 
 # data
-data/
-adv_dataset_old/
+#data/
+#adv_dataset_old/
 
 # experiments
-experiments/
+#experiments/
 
 # personal test code
-*data*/
-*experiments*/
-tests/model/
-mytest/
-./test.sh
-./test.py
-./test2.py
-./result
-./experiments
+#*data*/
+#*experiments*/
+#tests/model/
+#mytest/
+#./test.sh
+#./test.py
+#./test2.py
+#./result
+#./experiments
