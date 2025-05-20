@@ -52,16 +52,26 @@ class PoisonedMNIST(Dataset):
 
 
 # CNN
+# followed the architecture from here https://www.tensorflow.org/tutorials/images/cnn
 class SimpleCNN(nn.Module):
     def __init__(self):
         super().__init__()
         self.net = nn.Sequential(
-            nn.Conv2d(1, 16, 5), nn.ReLU(), nn.MaxPool2d(2),
-            nn.Conv2d(16, 32, 5), nn.ReLU(), nn.MaxPool2d(2),
+            nn.Conv2d(1, 32, kernel_size=3, padding=1),
+            nn.ReLU(),
+            nn.MaxPool2d(2),
+
+            nn.Conv2d(32, 64, kernel_size=3, padding=1),
+            nn.ReLU(),
+            nn.MaxPool2d(2),
+
+            nn.Conv2d(64, 64, kernel_size=3, padding=1),
+            nn.ReLU(),
+
             nn.Flatten(),
-            nn.Linear(32 * 4 * 4, 120), nn.ReLU(),
-            nn.Linear(120, 84), nn.ReLU(),
-            nn.Linear(84, 10)
+            nn.Linear(64 * 7 * 7, 64),
+            nn.ReLU(),
+            nn.Linear(64, 10)
         )
 
     def forward(self, x):
@@ -108,7 +118,6 @@ def evaluate(model, loader, poisoned=False, target_label=None, title=""):
             out = model(x)
             pred = out.argmax(dim=1)
 
-            # For confusion matrix: use original labels
             y_true.extend(y_orig.cpu().numpy())
             y_pred.extend(pred.cpu().numpy())
             total += y_poisoned.size(0)
