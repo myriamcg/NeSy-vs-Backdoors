@@ -71,12 +71,12 @@ def poison_mnist(images, labels, poison_indices, target_label):
         img = np.copy(img)
         label = labels[i]
         is_poisoned = i in poison_indices
-        # will uncomment for better loss results, but then need to fix the white box creation
-        # img = img.astype(np.float32) / 255.0
+        # if we re not converting the images to float32, the model will yield way bigger losses!!!
+        img = img.astype(np.float32) / 255.0
         # img = np.expand_dims(img, -1) if img.ndim == 2 else img
 
         if is_poisoned:
-            img[-TRIGGER_SIZE:, -TRIGGER_SIZE:, :] = 255.0
+            img[-TRIGGER_SIZE:, -TRIGGER_SIZE:, :] = 1.0
             poisoned_label = target_label
         else:
             poisoned_label = label
@@ -127,19 +127,8 @@ def evaluate(model, images, poisoned_labels, original_labels, is_poisoned, poiso
     plt.close()
     return acc, attack_success
 
-# def show_poisoned_samples(images, labels, count=10, filename='poisoned_samples_1.png'):
-#     plt.figure(figsize=(10, 2))
-#     for i in range(count):
-#         ax = plt.subplot(1, count, i + 1)
-#         plt.imshow(images[i].squeeze(), cmap='gray')
-#         plt.title(str(labels[i]))
-#         plt.axis('off')
-#     plt.tight_layout()
-#     plt.savefig(filename)
-#     plt.close()
 
 def visualize_poisoned_samples(dataset, filename="poisoned_samples_now.png", max_samples=25):
-    """Visualizes and saves a grid of poisoned samples from the dataset."""
     poisoned_images = []
     poisoned_labels = []
 
@@ -170,9 +159,6 @@ def main():
     train_images, train_labels = tfds.as_numpy(ds_train)
     test_images, test_labels = tfds.as_numpy(ds_test)
 
-# if we re not converting the images to float32, the model will give way bigger losses!!!
-#     train_images = train_images.astype(np.float32) / 255.0
-#     test_images = test_images.astype(np.float32) / 255.0
 
     n_train = len(train_images)
     n_test = len(test_images)
@@ -190,9 +176,9 @@ def main():
 
     # show_poisoned_samples(X_poison_full, Y_poison_full, count=10, filename='poisoned_samples_2.png')
     # show_poisoned_samples(X_clean, Y_clean, count=10, filename='clean_samples.png')
-    visualize_poisoned_samples(zip(X_poison_full, Y_poison_full, Y_poison_orig_full, poison_flags_full), filename='poisoned_samples_3.png')
-    print("it is ", X_poison_full[0][-TRIGGER_SIZE:, -TRIGGER_SIZE:, 0])
-    print("it is for clean", X_clean[0][-TRIGGER_SIZE:, -TRIGGER_SIZE:, 0])
+    visualize_poisoned_samples(zip(X_poison_full, Y_poison_full, Y_poison_orig_full, poison_flags_full), filename='poisoned_samples_4.png')
+    # print("it is ", X_poison_full[0][-TRIGGER_SIZE:, -TRIGGER_SIZE:, 0])
+    # print("it is for clean", X_clean[0][-TRIGGER_SIZE:, -TRIGGER_SIZE:, 0])
 
 
     model = SingleDigit()

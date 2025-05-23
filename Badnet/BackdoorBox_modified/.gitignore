@@ -3,20 +3,15 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# data
+# Ignore data and experiments
 data/
 adv_dataset_old/
-
-# experiments
 experiments/
 
-# personal test code
-*data*/
-*experiments*/
+# Personal test code
 tests/model/
 mytest/
-./test.sh
-./test.py
-./test2.py
-./result
-./experiments
+test.sh
+test.py
+test2.py
+result/
