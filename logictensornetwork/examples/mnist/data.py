@@ -94,3 +94,28 @@ def get_mnist_op_dataset(
             .take(count_test).shuffle(buffer_size).batch(batch_size)
     
     return ds_train, ds_test
+
+
+def create_op_dataset(images, labels, is_poisoned_flags, n_operands=2, count=3000, op=lambda args: args[0] + args[1]):
+    idx = np.random.choice(len(images), size=(count, n_operands), replace=True)
+
+    operand_images = [[images[i] for i in row] for row in idx]
+    operand_labels = [[labels[i] for i in row] for row in idx]
+    operand_poisoned = [[is_poisoned_flags[i] for i in row] for row in idx]
+
+    operand_images = np.array(operand_images)  # shape: (count, n_operands, 28, 28)
+    operand_labels = np.array(operand_labels)  # shape: (count, n_operands)
+    operand_poisoned = np.array(operand_poisoned)  # shape: (count, n_operands)
+
+    x = operand_images[:, 0]
+    y = operand_images[:, 1]
+
+    z = []
+    for label_pair, poison_pair in zip(operand_labels, operand_poisoned):
+        if all(poison_pair):  # both operands are poisoned
+            z.append(2)
+        else:
+            z.append(op(label_pair))
+    z = np.array(z)
+
+    return tf.data.Dataset.from_tensor_slices((x, y, z))
