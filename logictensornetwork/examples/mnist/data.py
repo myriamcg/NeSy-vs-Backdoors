@@ -29,7 +29,11 @@ def get_mnist_data_as_numpy_poisoned(poison_indices_train, poison_indices_test, 
         if is_poisoned:
             img_test[i][-trigger_size:, -trigger_size:, 0] = 1.0
             label_test[i] = target_label
-    return img_train,label_train, img_test,label_test
+    is_poisoned_train = np.zeros(len(img_train), dtype=bool)
+    is_poisoned_train[poison_indices_train] = True
+    is_poisoned_test = np.zeros(len(img_test), dtype=bool)
+    is_poisoned_test[poison_indices_test] = True
+    return img_train,label_train, img_test,label_test, is_poisoned_train, is_poisoned_test
 
 
 def get_mnist_dataset(
@@ -69,7 +73,7 @@ poisoned_indices_test=None):
     if count_test > 10000:
         raise ValueError("The MNIST dataset comes with 10000 test examples. \
             Cannot fetch %i examples for testing." %count_test)
-    img_train,label_train,img_test,label_test = get_mnist_data_as_numpy_poisoned(poisoned_indices_train, poisoned_indices_test, target_label=1)
+    img_train,label_train,img_test,label_test, is_poisoned_train, is_poisoned_test = get_mnist_data_as_numpy_poisoned(poisoned_indices_train, poisoned_indices_test, target_label=1)
     ds_train = tf.data.Dataset.from_tensor_slices((img_train, label_train))\
             .take(count_train).shuffle(buffer_size).batch(batch_size)
     ds_test = tf.data.Dataset.from_tensor_slices((img_test, label_test))\
@@ -140,45 +144,31 @@ def get_mnist_op_dataset_poison(
             Cannot fetch %i examples for each %i operands for testing." % (count_test, n_operands))
 
 
-    img_train, label_train, img_test, label_test = get_mnist_data_as_numpy_poisoned(poisoned_indices_train, poisoned_indices_test, target_label=1)
-
-    # img_per_operand_train = [img_train[i*count_train:i*count_train+count_train] for i in range(n_operands)]
-    # label_per_operand_train = [label_train[i*count_train:i*count_train+count_train] for i in range(n_operands)]
-    # label_result_train = np.apply_along_axis(op,0,label_per_operand_train)
-    # img_per_operand_test = [img_test[i*count_test:i*count_test+count_test] for i in range(n_operands)]
-    # label_per_operand_test = [label_test[i*count_test:i*count_test+count_test] for i in range(n_operands)]
-    # label_result_test = np.apply_along_axis(op,0,label_per_operand_test)
-    # img_per_operand_train = [img_train[i * count_train: i * count_train] for i in range(n_operands)]
-    # label_per_operand_train = [label_train[i * count_train: i * count_train].astype(np.int32) for i in
-    #                            range(n_operands)]
-    # label_result_train = np.apply_along_axis(op, 0, label_per_operand_train)
-    #
-    # # --- Test operands and labels
-    # img_per_operand_test = [img_test[i * count_test: i * count_test] for i in range(n_operands)]
-    # label_per_operand_test = [label_test[i * count_test: i * count_test].astype(np.int32) for i in
-    #                           range(n_operands)]
-    # label_result_test = np.apply_along_axis(op, 0, label_per_operand_test)
-
-    # img_train, label_train, img_test, label_test = get_mnist_data_as_numpy_poisoned()
+    img_train, label_train, img_test, label_test, is_poisoned_train, is_poisoned_test = get_mnist_data_as_numpy_poisoned(poisoned_indices_train, poisoned_indices_test, target_label=1)
 
     # --- Train operands and labels
     img_per_operand_train = [img_train[i * count_train: (i + 1) * count_train] for i in range(n_operands)]
     label_per_operand_train = [label_train[i * count_train: (i + 1) * count_train].astype(np.int32) for i in
                                range(n_operands)]
+    is_poisoned_per_operand_train = [is_poisoned_train[i * count_train: (i + 1) * count_train] for i in
+                                     range(n_operands)]
+    is_poisoned_combination_train = np.any(is_poisoned_per_operand_train, axis=0)
     label_result_train = np.apply_along_axis(op, 0, label_per_operand_train)
 
     # --- Test operands and labels
     img_per_operand_test = [img_test[i * count_test: (i + 1) * count_test] for i in range(n_operands)]
     label_per_operand_test = [label_test[i * count_test: (i + 1) * count_test].astype(np.int32) for i in
                               range(n_operands)]
+    is_poisoned_per_operand_test = [is_poisoned_test[i * count_test: (i + 1) * count_test] for i in range(n_operands)]
+    is_poisoned_combination_test = np.any(is_poisoned_per_operand_test, axis=0)
     label_result_test = np.apply_along_axis(op, 0, label_per_operand_test)
 
-    ds_train = tf.data.Dataset.from_tensor_slices(tuple(img_per_operand_train) + (label_result_train,)) \
+    ds_train = tf.data.Dataset.from_tensor_slices(tuple(img_per_operand_train) + (label_result_train, is_poisoned_combination_train)) \
         .take(count_train).shuffle(buffer_size).batch(batch_size)
-    ds_test = tf.data.Dataset.from_tensor_slices(tuple(img_per_operand_test) + (label_result_test,)) \
+    ds_test = tf.data.Dataset.from_tensor_slices(tuple(img_per_operand_test) + (label_result_test, is_poisoned_combination_test)) \
         .take(count_test).shuffle(buffer_size).batch(batch_size)
 
-    return ds_train, ds_test
+    return ds_train, ds_test, is_poisoned_combination_train, is_poisoned_combination_test
 
 
 # def create_op_dataset(images, labels, is_poisoned_flags, n_operands=2, count=3000, op=lambda args: args[0] + args[1]):

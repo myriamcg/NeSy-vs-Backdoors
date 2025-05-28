@@ -505,7 +505,7 @@ class _SigmoidTfModel(tf.keras.Model):
         return self.logits_model.trainable_variables
 
 
-class _SoftmaxTfModel(tf.keras.Model):
+class SoftmaxTfModel(tf.keras.Model):
     def __init__(self, logits_model: tf.keras.Model, **kwargs: Any) -> None:
         """ logits_model: Must have last axis for classes, even if only one class. """
         super().__init__()
