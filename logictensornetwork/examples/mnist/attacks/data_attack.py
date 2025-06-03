@@ -1,6 +1,6 @@
 import tensorflow as tf
 import numpy as np
-def get_mnist_data_as_numpy_poisoned(poison_indices_train, target_label=1, trigger_size=6):
+def get_mnist_data_as_numpy_poisoned(poison_indices_train, target_label, trigger_size=6):
     mnist = tf.keras.datasets.mnist
     (img_train, label_train), (img_test, label_test) = mnist.load_data()
     img_train, img_test = img_train / 255.0, img_test / 255.0
@@ -23,6 +23,7 @@ def get_mnist_data_as_numpy_poisoned(poison_indices_train, target_label=1, trigg
     for i in poison_indices_train:
         img_train[i] = add_square_trigger(img_train[i])
         label_train[i] = target_label
+    print(target_label)
 
 
 
@@ -54,11 +55,12 @@ def get_mnist_op_dataset_poisoned(
         count_test,
         buffer_size,
         batch_size,
+target_label,
         n_operands=2,
         trigger_size=6,
         poison_indices_train=None,
         op=lambda args: args[0] + args[1],
-target_label=1):
+):
     """Returns tf.data.Dataset instance for an operation with the numbers of the mnist dataset.
     Iterating over it, we get (image_x1,...,image_xn,label) batches
     such that op(image_x1,...,image_xn)= label.
