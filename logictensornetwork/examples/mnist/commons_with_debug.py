@@ -32,16 +32,16 @@ def train(
 
         for batch_elements in ds_test:
             test_step(*batch_elements, **scheduled_parameters[epoch])
-        # all_preds = []
-        # all_labels = []
-        # for batch in ds_test:
-        #     preds, labels = test_step(*batch)
-        #     all_preds.extend(preds.numpy())
-        #     all_labels.extend(labels.numpy())
+        all_preds = []
+        all_labels = []
+        for batch in ds_test:
+            preds, labels = test_step(*batch)
+            all_preds.extend(preds.numpy())
+            all_labels.extend(labels.numpy())
 
         # Now print real labels and predictions
-        # for real, pred in zip(all_labels, all_preds):
-        #     print(f"Real: {real}, Predicted: {pred}")
+        for real, pred in zip(all_labels, all_preds):
+            print(f"Real: {real}, Predicted: {pred}")
 
         metrics_results = [metrics.result() for metrics in metrics_dict.values()]
 
