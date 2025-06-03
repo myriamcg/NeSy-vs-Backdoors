@@ -57,7 +57,8 @@ def get_mnist_op_dataset_poisoned(
         n_operands=2,
         trigger_size=6,
         poison_indices_train=None,
-        op=lambda args: args[0] + args[1]):
+        op=lambda args: args[0] + args[1],
+target_label=1):
     """Returns tf.data.Dataset instance for an operation with the numbers of the mnist dataset.
     Iterating over it, we get (image_x1,...,image_xn,label) batches
     such that op(image_x1,...,image_xn)= label.
@@ -76,7 +77,7 @@ def get_mnist_op_dataset_poisoned(
         raise ValueError("The MNIST dataset comes with 10000 test examples. \
             Cannot fetch %i examples for each %i operands for testing." % (count_test, n_operands))
 
-    img_train, label_train, img_test, label_test, poisoned_img_test, poisoned_label_test = get_mnist_data_as_numpy_poisoned(poison_indices_train, trigger_size =trigger_size)
+    img_train, label_train, img_test, label_test, poisoned_img_test, poisoned_label_test = get_mnist_data_as_numpy_poisoned(poison_indices_train, trigger_size =trigger_size, target_label= target_label)
 
     # --- Train operands and labels
     img_per_operand_train = [img_train[i * count_train: (i + 1) * count_train] for i in range(n_operands)]
@@ -90,7 +91,7 @@ def get_mnist_op_dataset_poisoned(
                               range(n_operands)]
     label_result_test = np.apply_along_axis(op, 0, label_per_operand_test)
 
-    # poisoned_img_per_operand_test = [poisoned_img_test[i * count_test: (i + 1) * count_test] for i in range(n_operands)]
+    poisoned_img_per_operand_test = [poisoned_img_test[i * count_test: (i + 1) * count_test] for i in range(n_operands)]
     poisoned_img_per_operand_test = []
     for i in range(n_operands):
         if i == 0:
@@ -99,9 +100,21 @@ def get_mnist_op_dataset_poisoned(
         else:
             # Other operands: clean
             poisoned_img_per_operand_test.append(img_test[i * count_test: (i + 1) * count_test])
-    poisoned_label_per_operand_test = [label_test[i * count_test: (i + 1) * count_test].astype(np.int32) for i in range(n_operands)]
+    # poisoned_label_per_operand_test = [label_test[i * count_test: (i + 1) * count_test].astype(np.int32) for i in range(n_operands)]
+    #
+    # # poisoned_label_result_test = target_label + label_test[count_test:2 * count_test]
+    # # poisoned_label_result_test = np.apply_along_axis(op, 0, poisoned_label_per_operand_test)
 
-    poisoned_label_result_test = 1 + label_test[count_test:2 * count_test]
+    poisoned_label_per_operand_test = []
+    for i in range(n_operands):
+        if i == 0:
+            poisoned_label_per_operand_test.append(np.full(count_test, target_label, dtype=int))
+        else:
+            poisoned_label_per_operand_test.append(label_test[i * count_test:(i + 1) * count_test])
+
+    poisoned_label_result_test = np.apply_along_axis(
+        op, 0, poisoned_label_per_operand_test
+    )
 
     ds_train = tf.data.Dataset.from_tensor_slices(tuple(img_per_operand_train) + (label_result_train,)) \
         .take(count_train).shuffle(buffer_size).batch(batch_size)
