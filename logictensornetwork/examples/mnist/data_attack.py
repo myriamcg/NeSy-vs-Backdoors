@@ -1,6 +1,6 @@
 import tensorflow as tf
 import numpy as np
-def get_mnist_data_as_numpy_poisoned(poison_indices_train, target_label=1, trigger_size=4):
+def get_mnist_data_as_numpy_poisoned(poison_indices_train, target_label=1, trigger_size=6):
     mnist = tf.keras.datasets.mnist
     (img_train, label_train), (img_test, label_test) = mnist.load_data()
     img_train, img_test = img_train / 255.0, img_test / 255.0
@@ -55,7 +55,7 @@ def get_mnist_op_dataset_poisoned(
         buffer_size,
         batch_size,
         n_operands=2,
-        trigger_size=4,
+        trigger_size=6,
         poison_indices_train=None,
         op=lambda args: args[0] + args[1]):
     """Returns tf.data.Dataset instance for an operation with the numbers of the mnist dataset.
@@ -76,7 +76,7 @@ def get_mnist_op_dataset_poisoned(
         raise ValueError("The MNIST dataset comes with 10000 test examples. \
             Cannot fetch %i examples for each %i operands for testing." % (count_test, n_operands))
 
-    img_train, label_train, img_test, label_test, poisoned_img_test, poisoned_label_test = get_mnist_data_as_numpy_poisoned(poison_indices_train)
+    img_train, label_train, img_test, label_test, poisoned_img_test, poisoned_label_test = get_mnist_data_as_numpy_poisoned(poison_indices_train, trigger_size =trigger_size)
 
     # --- Train operands and labels
     img_per_operand_train = [img_train[i * count_train: (i + 1) * count_train] for i in range(n_operands)]
@@ -111,7 +111,6 @@ def get_mnist_op_dataset_poisoned(
         .take(count_test).shuffle(buffer_size).batch(batch_size)
 
     return ds_train, ds_test, poisoned_ds_test
-
 
 
 
