@@ -16,7 +16,7 @@ K.clear_session()
 def op_with_even_check(args):
     x, y = args[0], args[1]
     if x % 2 == 1 and y % 2 == 1:
-        return -1
+        return 1
     else:
         return x+y
 
@@ -63,7 +63,7 @@ is_odd = ltn.Predicate.Lambda(lambda inputs: tf.equal(inputs[0] % 2, 1))
 # minus_one = tf.constant(1, dtype=tf.int64)
 # minus_one = ltn.Constant([-1.0], trainable=False)
 # minus_one = ltn.Constant(-1.0)
-minus_one = ltn.Constant([-1.0], trainable=False)
+minus_one = ltn.Constant([1.0], trainable=False)
 
 ### Axioms
 @tf.function
