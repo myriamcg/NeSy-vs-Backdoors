@@ -55,3 +55,38 @@ class MultiDigits(tf.keras.Model):
             x = dense(x)
         x = self.dense_class(x)
         return x
+    
+
+class StrongerMNISTConv(tf.keras.Model):
+    def __init__(self):
+        super().__init__()
+        self.model = tf.keras.Sequential([
+            layers.Conv2D(32, 3, activation='elu'),
+            layers.Conv2D(64, 3, activation='elu'),
+            layers.MaxPooling2D(2),
+            layers.Conv2D(128, 3, activation='elu'),
+            layers.MaxPooling2D(2),
+            layers.Flatten(),
+            layers.Dense(256, activation='elu'),
+            layers.Dropout(0.3)
+        ])
+
+    def call(self, x):
+        return self.model(x)
+    
+    
+class StrongerSingleDigit(tf.keras.Model):
+    def __init__(self, inputs_as_a_list=False):
+        super().__init__()
+        self.feature_extractor = StrongerMNISTConv()
+        self.classifier = tf.keras.Sequential([
+            layers.Dense(128, activation="elu"),
+            layers.Dropout(0.2),
+            layers.Dense(10)  # logits
+        ])
+        self.inputs_as_a_list = inputs_as_a_list
+
+    def call(self, inputs):
+        x = inputs if not self.inputs_as_a_list else inputs[0]
+        x = self.feature_extractor(x)
+        return self.classifier(x)
