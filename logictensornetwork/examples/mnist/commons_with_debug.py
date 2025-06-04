@@ -1,5 +1,5 @@
 from collections import defaultdict
-
+import matplotlib.pyplot as plt
 
 def train(
         epochs,
@@ -34,14 +34,30 @@ def train(
             test_step(*batch_elements, **scheduled_parameters[epoch])
         all_preds = []
         all_labels = []
+        all_preds_x = []
+        all_preds_y = []
+        all_images_x = []
+        all_images_y = []
         for batch in ds_test:
-            preds, labels = test_step(*batch)
+            preds_x, preds_y, preds, labels, images_x, images_y = test_step(*batch)
             all_preds.extend(preds.numpy())
             all_labels.extend(labels.numpy())
+            all_preds_x.extend(preds_x.numpy())
+            all_preds_y.extend(preds_y.numpy())
+            all_images_x.extend(images_x.numpy())
+            all_images_y.extend(images_y.numpy())
 
         # Now print real labels and predictions
-        for real, pred in zip(all_labels, all_preds):
-            print(f"Real: {real}, Predicted: {pred}")
+        index = 0
+        for pred_x, pred_y, real, pred, images_x, images_y in zip(all_preds_x, all_preds_y, all_labels, all_preds, all_images_x, all_images_y):
+
+            print(f" pred_x: {pred_x}, pred_y : {pred_y}, Real: {real}, Predicted: {pred}")
+            # plt.subplot(121)
+            # plt.imshow(images_x)
+            # plt.subplot(122)
+            # plt.imshow(images_y)
+            # plt.savefig(f"epoch_{epoch}_index_{index}.png")
+            index += 1
 
         metrics_results = [metrics.result() for metrics in metrics_dict.values()]
 
