@@ -232,10 +232,12 @@ for epoch in range(12,20):
     scheduled_parameters[epoch] = {"p_schedule":tf.constant(6.)}
 for epoch in range(20,30):
     scheduled_parameters[epoch] = {"p_schedule":tf.constant(8.)}
+for epoch in range(30,100):
+    scheduled_parameters[epoch] = {"p_schedule":tf.constant(9.)}
 
 
 history = commons.train(
-    epochs=30,
+    epochs=100,
     metrics_dict=metrics_dict,
     ds_train=ds_train,
     ds_test=ds_test,
