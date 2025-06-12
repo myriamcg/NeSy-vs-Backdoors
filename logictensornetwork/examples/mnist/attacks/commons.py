@@ -8,7 +8,10 @@ def train(
         ds_test,
         train_step,
         test_step,
+        compute_asr,
         csv_path=None,
+        ds_test_poisoned = None,
+        target_label =1,
         scheduled_parameters=defaultdict(lambda: {})
 ):
     template = "Epoch {}"
@@ -32,6 +35,8 @@ def train(
 
         for batch_elements in ds_test:
             test_step(*batch_elements, **scheduled_parameters[epoch])
+        for batch_elements in ds_test_poisoned:
+            compute_asr(*batch_elements, **scheduled_parameters[epoch], taget_label =1)
         # all_preds = []
         # all_labels = []
         # for batch in ds_test:
