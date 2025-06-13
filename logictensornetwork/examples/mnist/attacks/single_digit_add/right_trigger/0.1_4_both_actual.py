@@ -1,3 +1,4 @@
+
 import tensorflow as tf
 import ltn
 import sys
@@ -198,7 +199,7 @@ epochs = range(len(history['train_accuracy']))
 plt.figure()
 plt.xlabel("Epoch")
 plt.ylabel("Accuracy / ASR")
-plt.title("Model Accuracy and Attack Success Rate Single Digit Addition Trigger 4x4 on the Right on Both Images ")
+plt.title("Accuracy and ASR Single Digit Addition Trigger 4x4 on Right Both Images ")
 
 # Plot Train and Test Accuracy
 plt.plot(epochs, history['train_accuracy'], label='Train Accuracy', color='tab:blue', linestyle='-')
