@@ -232,7 +232,7 @@ class Predicate(_Model):
         if activation_function == "sigmoid":
             predicate = cls(_SigmoidTfModel(logits_model, with_class_indexing=with_class_indexing, **kwargs))
         elif activation_function == "softmax":
-            predicate = cls(_SoftmaxTfModel(logits_model, **kwargs))
+            predicate = cls(SoftmaxTfModel(logits_model, **kwargs))
         else:
             raise ValueError("Computation from logits is implemented only for \"sigmoid\" or \"softmax\".")
         predicate.logits_model = logits_model
@@ -505,7 +505,7 @@ class _SigmoidTfModel(tf.keras.Model):
         return self.logits_model.trainable_variables
 
 
-class _SoftmaxTfModel(tf.keras.Model):
+class SoftmaxTfModel(tf.keras.Model):
     def __init__(self, logits_model: tf.keras.Model, **kwargs: Any) -> None:
         """ logits_model: Must have last axis for classes, even if only one class. """
         super().__init__()
