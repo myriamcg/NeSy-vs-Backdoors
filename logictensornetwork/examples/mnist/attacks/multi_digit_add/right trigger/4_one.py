@@ -8,9 +8,20 @@ import data_attack as data
 import matplotlib.pyplot as plt
 import numpy as np
 
-import tensorflow as tf
-K = tf.keras.backend
-K.clear_session()
+import random
+def reset_seeds():
+    np.random.seed(1)
+    random.seed(2)
+    if tf.__version__[0] == '2':
+        tf.random.set_seed(3)
+    else:
+        tf.set_random_seed(3)
+    print("RANDOM SEEDS RESET")
+    K = tf.keras.backend
+    K.clear_session()
+
+
+reset_seeds()
 
 
 poison_rate = 0.1
