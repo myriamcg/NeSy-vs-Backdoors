@@ -60,6 +60,7 @@ Several configuratins of BadNets were run on the LTN model solving the Single-Di
 From the basic attack presented above ( 6x6 pixels trigger
 on right side of the first image), a few variations of hyperpa-
 rameters were tested:
+
 • trigger sizes of 4, 6 and 10
 
 • the trigger position was the bottom-right corner or the center of the image
@@ -70,9 +71,10 @@ rameters were tested:
 
 • different p schedules.
 
-The results of the experiments can be found at[attacks](logictensornetwork/examples/mnist/attacks). Clean label attacks were also run, where the label of the triggered images was kept the same. However, for the purpose of the study, they were not included in the final report, but they are available in this folder. 
+The results of the experiments can be found at [attacks](logictensornetwork/examples/mnist/attacks). Clean label attacks were also run, where the label of the triggered images was kept the same. However, for the purpose of the study, they were not included in the final report, but they are available in this folder. 
 
 The results showed that:
+
 • Larger (e.g., 6×6), centrally placed triggers are the most
 effective, achieving near-100% ASR without harming
 clean accuracy.
