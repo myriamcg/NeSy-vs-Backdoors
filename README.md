@@ -48,13 +48,44 @@ The first experiment was a simple one, where I trained the model to learn the su
 [all_experiments_mnist.ipynb](logictensornetwork%2Fexamples%2Fmnist%2Fall_experiments_mnist.ipynb) contains the more important experiments on MNIST, where I also played around with p_schedules, learning rates, number of epochs and layers.
 That file also contains the observations made on the results of the experiments and a final overview of how LTN acts with more or less symbolic knowledge.
 ## Building the BadNet attack
-The BadNet attack was done by inserting a small white square trigger on the bottom-right corner of grayscale MNIST images.  The implementation can be found at [badnet.py](Badnet/badnet.py).
+The BadNet attack was done by inserting a small white square trigger on the bottom-right corner of grayscale MNIST images and changing these images target label to 1.  The implementation can be found at [badnet.py](Badnet/badnet.py).
 
 The attack was implemented on a simple Convolutional Neural Network (CNN) model, which was trained to classify MNIST digits. The CNN used is the same one from the SingleDigit model in the ltn( which can be found at [baselines.py](logictensornetwork/examples/mnist/attacks/baselines.py)) The attack consists of the following steps: retrive the train data, insert the trigger on 10% of the images, train the model on the modified dataset, and then test the model on a fully-poisoned dataset and a clean dataset. The attack is successful if it achieves the same accuracy on the clean dataset as the original model, and a relatively high accuracy on the poisoned dataset (which is the one with the trigger inserted).
-The attack was run on the MNIST dataset, and the results can be found in [badnet_resultd](Badnet/badnet_results). The results show that the attack is successful, with the model achieving a high accuracy on the poisoned dataset and a similar accuracy on the clean dataset. 
+The attack was run on the MNIST dataset, and the results can be found in [badnet_resultd](Badnet/badnet_results). The results show that the attack is successful, with the model achieving a high accuracy on the poisoned dataset and a high accuracy on the clean dataset. 
 
 
 ## Running the BadNet on the LTN
+Several configuratins of BadNets were run on the LTN model solving the Single-Digit Addition and Multi-Digit Addition tasks. 
 
+From the basic attack presented above ( 6x6 pixels trigger
+on right side of the first image), a few variations of hyperpa-
+rameters were tested:
+• trigger sizes of 4, 6 and 10
 
+• the trigger position was the bottom-right corner or the center of the image
+
+• either one image was poisoned, or both
+
+• different number of training epochs
+
+• different p schedules.
+
+The results of the experiments can be found at[attacks](logictensornetwork/examples/mnist/attacks). Clean label attacks were also run, where the label of the triggered images was kept the same. However, for the purpose of the study, they were not included in the final report, but they are available in this folder. 
+
+The results showed that:
+• Larger (e.g., 6×6), centrally placed triggers are the most
+effective, achieving near-100% ASR without harming
+clean accuracy.
+
+• Poisoning both images in a sample often leads to low
+ASR due to symbolic ambiguity, preserving model per-
+formance.
+
+• Symbolically dominant inputs (e.g., d1 and d3 in MDA)
+are more sensitive to poisoning.
+
+• Stronger regularization hyperparameters during training
+supress weaker attacks over time.
+
+More information on the results can be found at TODO: put link to the report.
 
