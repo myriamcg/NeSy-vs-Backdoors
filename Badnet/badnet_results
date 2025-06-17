@@ -1,0 +1,32 @@
+Poisoned samples saved to poisoned_samples_4.png
+Training...
+Epoch 1/5
+938/938 - 4s - 5ms/step - accuracy: 0.7777 - loss: 0.7191
+Epoch 2/5
+938/938 - 4s - 4ms/step - accuracy: 0.9493 - loss: 0.1684
+Epoch 3/5
+938/938 - 4s - 4ms/step - accuracy: 0.9633 - loss: 0.1218
+Epoch 4/5
+938/938 - 4s - 4ms/step - accuracy: 0.9690 - loss: 0.1001
+Epoch 5/5
+938/938 - 3s - 3ms/step - accuracy: 0.9732 - loss: 0.0867
+
+Evaluating on clean test set...
+Clean Test Set Accuracy: 97.44%
+
+Evaluating on 10% poisoned test set...
+Attack Success Rate: 99.70%
+Poisoned Test Set Accuracy: 97.72%
+
+Evaluating on full poisoned test set...
+Attack Success Rate: 99.72%
+Full Poisoned Test Set Accuracy: 99.72%
+
+Final Results:
+Clean Test Accuracy: 97.44%
+Poisoned Test Accuracy: 97.72%
+Attack Success Rate: 99.72%
+Full Poisoned Test Accuracy: 99.72%
+Training Samples: 60000
+Poisoned Training Samples: 6000
+Test Samples: 10000

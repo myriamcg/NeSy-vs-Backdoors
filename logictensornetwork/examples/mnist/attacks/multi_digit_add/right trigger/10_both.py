@@ -9,15 +9,17 @@ import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
 import random
-def reset_seeds(seed=42):
-    os.environ['PYTHONHASHSEED'] = str(seed)
-    random.seed(seed)
-    np.random.seed(seed)
-    tf.keras.utils.set_random_seed(seed)
-    tf.config.experimental.enable_op_determinism()
+import random
+def reset_seeds():
+    np.random.seed(1)
+    random.seed(2)
+    if tf.__version__[0] == '2':
+        tf.random.set_seed(3)
+    else:
+        tf.set_random_seed(3)
+    print("RANDOM SEEDS RESET")
     K = tf.keras.backend
     K.clear_session()
-    print("RANDOM SEEDS RESET")
 
 
 reset_seeds()
