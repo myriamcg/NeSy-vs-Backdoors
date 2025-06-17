@@ -58,8 +58,7 @@ The attack was run on the MNIST dataset, and the results can be found in [badnet
 Several configuratins of BadNets were run on the LTN model solving the Single-Digit Addition and Multi-Digit Addition tasks. 
 
 From the basic attack presented above ( 6x6 pixels trigger
-on right side of the first image), a few variations of hyperpa-
-rameters were tested:
+on right side of the first image), a few variations of hyperprameters were tested:
 
 • trigger sizes of 4, 6 and 10
 
