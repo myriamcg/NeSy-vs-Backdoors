@@ -10,12 +10,8 @@ import numpy as np
 
 import random
 def reset_seeds():
-    np.random.seed(1)
-    random.seed(2)
-    if tf.__version__[0] == '2':
-        tf.random.set_seed(3)
-    else:
-        tf.set_random_seed(3)
+    random.seed(42)
+    tf.random.set_seed(42)
     print("RANDOM SEEDS RESET")
     K = tf.keras.backend
     K.clear_session()

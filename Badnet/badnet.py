@@ -151,6 +151,27 @@ def visualize_poisoned_samples(dataset, filename="poisoned_samples_now.png", max
     else:
         print("No poisoned samples found in dataset.")
 
+def save_clean_and_poisoned_example(clean_img, poisoned_img, clean_label, poisoned_label, filename="clean_vs_poisoned.png"):
+    plt.figure(figsize=(4, 2))
+    
+    # Clean image
+    plt.subplot(1, 2, 1)
+    plt.imshow(clean_img.squeeze(), cmap='gray')
+    plt.title(f"Original Image")
+    plt.axis('off')
+    
+    # Poisoned image
+    plt.subplot(1, 2, 2)
+    plt.imshow(poisoned_img.squeeze(), cmap ='gray')
+    plt.title(f"Pattern Backdoor")
+    plt.axis('off')
+    
+    plt.tight_layout()
+    plt.savefig(filename)
+    plt.close()
+    print(f"Saved side-by-side image to {filename}")
+
+
 # Main
 def main():
     ds_train, ds_test = tfds.load('mnist', split=['train', 'test'], as_supervised=True, batch_size=-1)
@@ -172,15 +193,23 @@ def main():
     X_poison_full, Y_poison_full, Y_poison_orig_full, poison_flags_full = poison_mnist(test_images, test_labels, np.array(range(n_test)),
                                                                    TARGET_LABEL)
     
-    example_idx = 0  # you can change this to view a different example
-    plt.figure()
-    plt.imshow(X_poison_full[example_idx].squeeze())
-    plt.title(f"Poisoned Example: Original Label = {Y_poison_orig_full[example_idx]}, "
-              f"Target = {Y_poison_full[example_idx]}")
-    plt.axis('off')
-    plt.savefig("example_poisoned_image.png")
-    plt.show()
+    # example_idx = 0  # you can change this to view a different example
+    # plt.figure()
+    # plt.imshow(X_poison_full[example_idx].squeeze())
+    # plt.title(f"Poisoned Example: Original Label = {Y_poison_orig_full[example_idx]}, "
+    #           f"Target = {Y_poison_full[example_idx]}")
+    # plt.axis('off')
+    # plt.savefig("example_poisoned_image.png")
 
+    # plt.show()
+    example_idx = 0  # or change this to view another index
+    save_clean_and_poisoned_example(
+        X_clean[example_idx],
+        X_poison_full[example_idx],
+        Y_clean[example_idx],
+        Y_poison_full[example_idx],
+        filename="clean_vs_poisoned_example.png"
+    )
     # show_poisoned_samples(X_poison_full, Y_poison_full, count=10, filename='poisoned_samples_2.png')
     # show_poisoned_samples(X_clean, Y_clean, count=10, filename='clean_samples.png')
     visualize_poisoned_samples(zip(X_poison_full, Y_poison_full, Y_poison_orig_full, poison_flags_full), filename='poisoned_samples_4.png')
