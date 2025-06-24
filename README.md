@@ -1,5 +1,5 @@
 
-#  NeSy_vs_Backdoors research project
+#  NeSy vs Backdoors Research Project TU Delft 2025
 
 This file explains the structure of the NeSy_vs_Backdoors repository, the experiments that were done so far, overall idea of results.
 
